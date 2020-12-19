@@ -46,7 +46,7 @@ defmodule Fetcher.UserAPI do
   end
 
   def handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}, state) do
-    parsed = Poison.Parser.parse!(body, %{})
+    parsed = parse_json_to_map(body)
     {:reply, parsed, state}
   end
 
@@ -54,8 +54,18 @@ defmodule Fetcher.UserAPI do
     {:reply, "Path: #{response.request_url} not found.", state}
   end
 
+  def handle_response({:ok, %HTTPoison.Response{status_code: status_code} = response}, state) do
+    {:reply,
+     "Request to #{response.request_url} completed but returned status code: #{status_code}.",
+     state}
+  end
+
   def handle_response({:error, %HTTPoison.Error{reason: reason}}, state) do
     IO.puts("Error fetching: #{inspect(reason)}")
     {:reply, state}
+  end
+
+  def parse_json_to_map(json) do
+    Poison.Parser.parse!(json, %{})
   end
 end
