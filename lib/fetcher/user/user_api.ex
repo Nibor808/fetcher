@@ -1,6 +1,6 @@
 defmodule Fetcher.UserAPI do
   @moduledoc """
-  Fetch fake user data from json place holder
+  Fetch fake user data from jsonplaceholder.typicode.com
   """
 
   use GenServer
@@ -11,7 +11,7 @@ defmodule Fetcher.UserAPI do
   # CLIENT INTERFEACE
 
   def start_link(_args) do
-    IO.puts("Starting the UserApi...")
+    IO.puts("Starting the User API...")
     GenServer.start_link(__MODULE__, :ok, name: @name)
   end
 
@@ -51,8 +51,7 @@ defmodule Fetcher.UserAPI do
   end
 
   def handle_response({:ok, %HTTPoison.Response{status_code: 404} = response}, state) do
-    path = response.request_url
-    {:reply, "Path: #{path} not found.", state}
+    {:reply, "Path: #{response.request_url} not found.", state}
   end
 
   def handle_response({:error, %HTTPoison.Error{reason: reason}}, state) do
