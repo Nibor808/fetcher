@@ -1,6 +1,7 @@
 defmodule Fetcher.UserAPI do
   @moduledoc """
   Fetch fake user data from jsonplaceholder.typicode.com
+  and convert it to a map.
   """
 
   use GenServer
@@ -16,14 +17,14 @@ defmodule Fetcher.UserAPI do
   end
 
   @doc """
-  Fetch all users
+  Fetch all users.
   """
   def users do
     GenServer.call(@name, :users)
   end
 
   @doc """
-  Fetch a user by id
+  Fetch a user by id.
   """
   def user(id) when is_integer(id) do
     GenServer.call(@name, {:user, id})
